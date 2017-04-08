@@ -1,0 +1,35 @@
+{
+  "name": "purescript-enzyme",
+  "version": "1.0.0",
+  "description": "Purescript bindings for enzyme library",
+  "main": "src/Test/Enzyme.purs",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "postinstall": "bower i",
+    "test": "pulp -w test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coot/purescript-enzyme.git"
+  },
+  "keywords": [
+    "purescript",
+    "enzyme",
+    "react",
+    "unit-testing"
+  ],
+  "author": "Marcin Szamotulski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/coot/purescript-enzyme/issues"
+  },
+  "homepage": "https://github.com/coot/purescript-enzyme#readme",
+  "dependencies": {
+    "enzyme": "^2.8.0",
+    "react": "^15.4.2",
+    "react-addons-test-utils": "^15.5.0",
+    "react-dom": "^15.4.2"
+  }
+}
