@@ -3,7 +3,7 @@ Purescript bindings for [enzyme](https://github.com/airbnb/enzyme) library.
 
 # Installation
 ```
-bower install purescript-eff
+bower install purescript-enzyme
 ```
 
 # Documentation
