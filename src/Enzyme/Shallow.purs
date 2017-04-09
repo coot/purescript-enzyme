@@ -1,28 +1,44 @@
 module Enzyme.Shallow
   ( shallow
+  , shallowWithOptions
   ) where
 
 import Prelude (($))
-import Data.Foreign (Foreign, toForeign)
-import Data.Record (merge)
-import React (ReactElement)
-import Enzyme.ShallowWrapper (ShallowWrapper)
 
-import Enzyme.Types (undefined)
+import Data.Foreign (Foreign, toForeign)
+import Data.Record.Class (class Subrow)
+import Enzyme.ShallowWrapper (ShallowWrapper)
+import React (ReactElement)
+
+import Enzyme.Internals (undefined, unsafeMerge)
 
 foreign import _shallow :: ReactElement -> Foreign -> ShallowWrapper
 
-type Optional = (lifecycleExperimental :: Boolean, context :: Foreign)
-type ShallowOptions = {|Optional}
+type Mandatory r = (|r) :: # Type
+type Optional r = (lifecycleExperimental :: Boolean, context :: Foreign | r)
+type ShallowOptions r = Record (Mandatory (Optional r))
 
-defaults :: {|Optional}
+defaults :: {|Optional ()}
 defaults = { lifecycleExperimental: false, context: toForeign undefined }
 
--- | shallow accepts ReactElement and ShallowOptions.  The later is a record
--- | with two optinal fields: field `lifecycleExperimental` with a boolean value,
--- | and `context` - a `Foreign` object.
-shallow :: ReactElement -> ShallowOptions -> ShallowWrapper
-shallow e o = _shallow e $ toForeign opts
+shallow :: ReactElement -> ShallowWrapper
+shallow e = _shallow e (toForeign defaults)
+
+mergeOpts
+  :: forall r s
+  .  Union r (Optional ()) (Optional s)
+  => Subrow s (Optional ())
+  => Record (Mandatory r)
+  -> Record (Optional s)
+mergeOpts o = unsafeMerge o defaults
+
+shallowWithOptions
+  :: forall r s t
+   .  Union s (Optional ()) (Optional r)
+  => Union r t (Optional ())
+  => ReactElement
+  -> { | s :: # Type }
+  -> ShallowWrapper
+shallowWithOptions e o = _shallow e $ toForeign opts
   where
-    opts :: ShallowOptions
-    opts = merge defaults o
+    opts = mergeOpts o
