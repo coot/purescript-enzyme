@@ -84,12 +84,6 @@ exports.containsMatchingElement = function(wrp) {
   }
 }
 
-exports.containsMatchingElements = function(wrp) {
-  return function(nodes) {
-    return wrp.containsMatchingElements(nodes)
-  }
-}
-
 exports.containsAllMatchingElements = function(wrp) {
   return function(nodes) {
     return wrp.containsAllMatchingElement(nodes)

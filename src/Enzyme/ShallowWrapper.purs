@@ -1,8 +1,6 @@
 module Enzyme.ShallowWrapper where
 
-import Prelude
 import Control.Monad.Eff (Eff)
-import DOM (DOM)
 import DOM.HTML.Types (HTMLElement)
 import Data.Foreign (Foreign)
 import Enzyme.Types (ENZYME, ReactClassInstance)

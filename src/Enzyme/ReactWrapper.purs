@@ -1,6 +1,6 @@
 module Enzyme.ReactWrapper where
 
-import Prelude
+import Prelude (Unit)
 import Control.Monad.Eff (Eff)
 import DOM (DOM)
 import DOM.HTML.Types (HTMLElement)
@@ -47,8 +47,6 @@ foreign import containsNodes :: ReactWrapper -> Array ReactElement -> Boolean
 
 foreign import containsMatchingElement :: ReactWrapper -> ReactElement -> Boolean
 
-foreign import containsMatchingElements :: ReactWrapper -> Array ReactElement -> Boolean
-
 foreign import containsAllMatchingElements :: ReactWrapper -> Array ReactElement -> Boolean
 
 foreign import containsAnyMatchingElements :: ReactWrapper -> Array ReactElement -> Boolean
@@ -58,7 +56,6 @@ foreign import find :: ReactWrapper -> String -> ReactWrapper
 
 findReactClass :: forall props. ReactWrapper -> ReactClass props -> ReactWrapper 
 findReactClass wrp cls = find wrp (unsafeCoerce cls)
-
 
 -- todo: find with callback
 -- foreign import findFn

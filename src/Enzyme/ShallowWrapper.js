@@ -10,10 +10,6 @@ exports.getNodes = function(wrp) {
   return wrp.getNodes()
 }
 
-exports.getDOMNode = function(wrp) {
-  return wrp.getDOMNode()
-}
-
 exports.ref = function(wrp) {
   return function(refname) {
     return wrp.ref(refname)
@@ -77,12 +73,6 @@ exports.containsNodes = function(wrp) {
 exports.containsMatchingElement = function(wrp) {
   return function(node) {
     return wrp.containsMatchingElement(node)
-  }
-}
-
-exports.containsMatchingElements = function(wrp) {
-  return function(nodes) {
-    return wrp.containsMatchingElements(nodes)
   }
 }
 
@@ -350,11 +340,5 @@ exports.debug = function(wrp) {
 exports.dive = function(wrp) {
   return function(opts) {
     return wrp.dive(opts)
-  }
-}
-
-exports.detach = function(wrp) {
-  return function() {
-    wrp.detach()
   }
 }
