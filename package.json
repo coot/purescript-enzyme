@@ -2,7 +2,7 @@
   "name": "purescript-enzyme",
   "version": "1.0.0",
   "description": "Purescript bindings for enzyme library",
-  "main": "src/Test/Enzyme.purs",
+  "main": "output/Enzyme/index.js",
   "directories": {
     "test": "test"
   },
