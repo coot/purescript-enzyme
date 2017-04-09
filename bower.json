@@ -8,15 +8,17 @@
     "output"
   ],
   "repository": {
-      "type": "git",
-      "url": "git://github.com/coot/purescript-enzyme.git"
+    "type": "git",
+    "url": "git://github.com/coot/purescript-enzyme.git"
   },
   "dependencies": {
     "purescript-prelude": "^3.0.0",
     "purescript-console": "^3.0.0",
     "react": "^15.5.0",
     "purescript-dom": "^4.0.0",
-    "purescript-records": "1.0.0"
+    "purescript-records": "1.0.0",
+    "purescript-maps": "^3.0.0",
+    "purescript-react": "^3.0.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^3.0.0"
