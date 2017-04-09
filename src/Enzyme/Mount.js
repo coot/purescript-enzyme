@@ -1,9 +1,9 @@
 "use strict"
 
-var enzyme = require("enzyme")
+var mount = require("enzyme").mount
 
-exports.mount = function(node) {
+exports._mount = function(node) {
   return function(opts) {
-    return enzyme.mount(node, opts)
+    return mount(node, opts)
   }
 }

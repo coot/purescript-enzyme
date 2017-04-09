@@ -1,9 +1,9 @@
 "use strict"
 
-var enzyme = require("enzyme")
+var shallow = require("enzyme").shallow
 
-exports.shallow = function(node) {
+exports._shallow = function(node) {
   return function(opts) {
-    return enzyme.shallow(node, opts)
+    return shallow(node, opts)
   }
 }
