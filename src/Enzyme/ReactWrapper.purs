@@ -1,14 +1,13 @@
 module Enzyme.ReactWrapper where
 
 import Prelude
-
 import Control.Monad.Eff (Eff)
 import DOM (DOM)
 import DOM.HTML.Types (HTMLElement)
 import Data.Foreign (Foreign)
-import React (ReactElement)
-
 import Enzyme.Types (ENZYME, ReactClassInstance)
+import React (ReactClass, ReactElement)
+import Unsafe.Coerce (unsafeCoerce)
 
 foreign import data ReactWrapper :: Type
 
@@ -57,6 +56,10 @@ foreign import containsAnyMatchingElements :: ReactWrapper -> Array ReactElement
 -- apriori we don't know what is the cls of the returned ReactWrapper
 foreign import find :: ReactWrapper -> String -> ReactWrapper
 
+findReactClass :: forall props. ReactWrapper -> ReactClass props -> ReactWrapper 
+findReactClass wrp cls = find wrp (unsafeCoerce cls)
+
+
 -- todo: find with callback
 -- foreign import findFn
 
@@ -91,7 +94,9 @@ foreign import state :: ReactWrapper -> String -> Foreign
 
 foreign import context :: ReactWrapper -> String -> Foreign
 
-foreign import children :: ReactWrapper -> String -> ReactWrapper
+foreign import children :: ReactWrapper -> ReactWrapper
+
+foreign import childrenBySelector :: ReactWrapper -> String -> ReactWrapper
 
 -- todo: children with callback
 
@@ -150,6 +155,8 @@ foreign import last :: ReactWrapper -> ReactWrapper
 foreign import isEmpty :: ReactWrapper -> Boolean
 
 foreign import exists :: ReactWrapper -> Boolean
+
+foreign import debug :: ReactWrapper -> String
 
 -- todo: tap
 

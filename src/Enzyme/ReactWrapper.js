@@ -175,6 +175,10 @@ exports.context = function(wrp) {
 }
 
 exports.children = function(wrp) {
+  return wrp.children()
+}
+
+exports.childrenBySelector = function(wrp) {
   return function(selector) {
     return wrp.children(selector)
   }
@@ -312,6 +316,10 @@ exports.isEmpty = function(wrp) {
 
 exports.exists = function(wrp) {
   return wrp.exists()
+}
+
+exports.debug = function(wrp) {
+  return wrp.debug()
 }
 
 exports.detach = function(wrp) {
