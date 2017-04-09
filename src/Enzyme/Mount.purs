@@ -1,4 +1,7 @@
-module Enzyme.Mount where
+module Enzyme.Mount 
+  ( mount
+  , mountWithOptions
+  ) where
 
 import Prelude (($))
 import DOM.Node.Types (Node)
@@ -28,7 +31,7 @@ mergeOpts o = unsafeMerge o defaults
 foreign import _mount :: ReactElement -> Foreign -> ReactWrapper
 
 mount :: ReactElement -> ReactWrapper
-mount e = _mount e (toForeign defaults)
+mount e = _mount e (toForeign {})
 
 mountWithOptions
   :: forall r s t
