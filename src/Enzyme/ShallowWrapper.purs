@@ -1,13 +1,13 @@
 module Enzyme.ShallowWrapper where
 
 import Prelude
-
 import Control.Monad.Eff (Eff)
 import DOM (DOM)
 import DOM.HTML.Types (HTMLElement)
 import Data.Foreign (Foreign)
-import React (ReactElement)
 import Enzyme.Types (ENZYME, ReactClassInstance)
+import React (ReactClass, ReactElement)
+import Unsafe.Coerce (unsafeCoerce)
 
 foreign import data ShallowWrapper :: Type
 
@@ -21,9 +21,9 @@ foreign import instance_ :: ShallowWrapper -> ReactClassInstance
 
 foreign import update :: ShallowWrapper -> Eff (enzyme :: ENZYME) ShallowWrapper
 
-foreign import rerender :: forall props . props -> ShallowWrapper
+foreign import rerender :: forall props . ShallowWrapper -> props -> ShallowWrapper
 
-foreign import rerenderWithContext :: forall props context. props -> context -> ShallowWrapper
+foreign import rerenderWithContext :: forall props context. ShallowWrapper -> props -> context -> ShallowWrapper
 
 foreign import setProps :: forall props. ShallowWrapper -> props -> ShallowWrapper
 
@@ -53,6 +53,9 @@ foreign import matchesElement :: ShallowWrapper -> ReactElement -> Boolean
 
 -- apriori we don't know what is the cls of the returned ShallowWrapper
 foreign import find :: ShallowWrapper -> String -> ShallowWrapper
+
+findReactClass :: forall props. ShallowWrapper -> ReactClass props -> ShallowWrapper 
+findReactClass wrp cls = find wrp (unsafeCoerce cls)
 
 -- todo: find with callback
 -- foreign import findFn
@@ -90,7 +93,9 @@ foreign import state :: ShallowWrapper -> String -> Foreign
 
 foreign import context :: ShallowWrapper -> String -> Foreign
 
-foreign import children :: ShallowWrapper -> String -> ShallowWrapper
+foreign import children :: ShallowWrapper -> ShallowWrapper
+
+foreign import childrenBySelector :: ShallowWrapper -> String -> ShallowWrapper
 
 -- todo: children with callback
 

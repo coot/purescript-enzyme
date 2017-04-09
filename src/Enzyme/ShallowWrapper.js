@@ -32,7 +32,7 @@ exports.update = function(wrp) {
 
 exports.rerender = function(wrp) {
   return function(props) {
-    return wrp.rerender(props, ctx)
+    return wrp.rerender(props)
   }
 }
 
@@ -188,6 +188,10 @@ exports.context = function(wrp) {
 }
 
 exports.children = function(wrp) {
+  return wrp.children()
+}
+
+exports.childrenBySelector = function(wrp) {
   return function(selector) {
     return wrp.children(selector)
   }
