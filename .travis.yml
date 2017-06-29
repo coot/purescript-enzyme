@@ -4,6 +4,10 @@ sudo: required
 node_js: stable
 env:
   - PATH=$HOME/purescript:$PATH
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
 install:
   - TAG=$(wget -q -O - https://github.com/purescript/purescript/releases/latest --server-response --max-redirect 0 2>&1 | sed -n -e 's/.*Location:.*tag\///p')
   - sudo apt-get install chromium-browser
@@ -11,6 +15,7 @@ install:
   - tar -xvf $HOME/purescript.tar.gz -C $HOME/
   - chmod a+x $HOME/purescript
   - npm install -g bower
+  - npm install pulp
   - npm install
 script:
   - bower install --production
