@@ -18,6 +18,7 @@ module Enzyme.ReactWrapper
   , containsAllMatchingElements
   , containsAnyMatchingElements
   , find
+  , findReactClass
   , is
   , isEmptyRender
   , filterWhere
