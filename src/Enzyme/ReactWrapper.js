@@ -261,7 +261,7 @@ exports.parentsBySelector = function(selector) {
 
 exports.parent = function(wrp) {
   return function() {
-    return wrp.parent(selector)
+    return wrp.parent()
   }
 }
 
