@@ -319,7 +319,9 @@ exports.reduce = function(fn) {
   return function(acu) {
     return function(wrp) {
       return function() {
-        return wrp.reduce(fn, acu)
+        return wrp.reduce(function(v, n, i) { 
+          return fn(v)(n)(i)
+        }, acu)
       }
     }
   }
@@ -329,7 +331,9 @@ exports.reduceRight = function(fn) {
   return function(acu) {
     return function(wrp) {
       return function() {
-        return wrp.reduceRight(fn, acu)
+        return wrp.reduceRight(function(v, n, i) {
+          return fn(v)(n)(i)
+        }, acu)
       }
     }
   }

@@ -1,11 +1,13 @@
 module Enzyme.ReactWrapper where
 
-import Prelude (Unit)
 import Control.Monad.Eff (Eff)
+import Control.Monad.Except (runExcept)
 import DOM (DOM)
 import DOM.HTML.Types (HTMLElement)
-import Data.Foreign (Foreign)
+import Data.Either (Either(..))
+import Data.Foreign (Foreign, readString)
 import Enzyme.Types (ENZYME, ReactClassInstance)
+import Prelude (Unit, bind, pure)
 import React (ReactClass, ReactElement)
 import Unsafe.Coerce (unsafeCoerce)
 
@@ -140,9 +142,9 @@ foreign import hasClass :: forall e. String -> ReactWrapper -> Eff (enzyme :: EN
 
 foreign import map :: forall a e. (ReactElement -> a) -> ReactWrapper -> Eff (enzyme :: ENZYME | e) (Array a)
 
-foreign import reduce :: forall a e. (a -> ReactWrapper -> a) -> a -> ReactWrapper -> Eff (enzyme :: ENZYME | e) a
+foreign import reduce :: forall a e. (a -> ReactWrapper -> Int -> a) -> a -> ReactWrapper -> Eff (enzyme :: ENZYME | e) a
 
-foreign import reduceRight :: forall a e. (a -> ReactWrapper -> a) -> a -> ReactWrapper -> Eff (enzyme :: ENZYME | e) a
+foreign import reduceRight :: forall a e. (a -> ReactWrapper -> Int -> a) -> a -> ReactWrapper -> Eff (enzyme :: ENZYME | e) a
 
 foreign import slice :: forall e. Int -> Int -> ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactWrapper
 
