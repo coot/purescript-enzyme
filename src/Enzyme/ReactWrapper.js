@@ -393,19 +393,15 @@ exports.at = function(idx) {
   }
 }
 
-exports.first = function(idx) {
-  return function(wrp) {
-    return function() {
-      return wrp.first(idx)
-    }
+exports.first = function(wrp) {
+  return function() {
+    return wrp.first()
   }
 }
 
-exports.last = function(idx) {
-  return function(wrp) {
-    return function() {
-      return wrp.last(idx)
-    }
+exports.last = function(wrp) {
+  return function() {
+    return wrp.last()
   }
 }
 
