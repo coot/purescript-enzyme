@@ -1,7 +1,6 @@
 module Enzyme.ShallowWrapper where
 
 import Control.Monad.Eff (Eff)
-import DOM.HTML.Types (HTMLElement)
 import Data.Foreign (Foreign)
 import Enzyme.Types (ENZYME, ReactClassInstance)
 import React (ReactClass, ReactElement)
@@ -9,156 +8,156 @@ import Unsafe.Coerce (unsafeCoerce)
 
 foreign import data ShallowWrapper :: Type
 
-foreign import getNode :: ShallowWrapper -> ReactElement
+foreign import getNode :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ReactElement
 
-foreign import getNodes :: ShallowWrapper -> Array ReactElement
+foreign import getNodes :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) (Array ReactElement)
 
-foreign import ref :: ShallowWrapper -> String -> HTMLElement
+foreign import ref :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import instance_ :: ShallowWrapper -> ReactClassInstance
+foreign import instance_ :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ReactClassInstance
 
-foreign import update :: ShallowWrapper -> Eff (enzyme :: ENZYME) ShallowWrapper
+foreign import update :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import rerender :: forall props . ShallowWrapper -> props -> ShallowWrapper
+foreign import rerender :: forall props e. ShallowWrapper -> props -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import rerenderWithContext :: forall props context. ShallowWrapper -> props -> context -> ShallowWrapper
+foreign import rerenderWithContext :: forall props context e. ShallowWrapper -> props -> context -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import setProps :: forall props. ShallowWrapper -> props -> ShallowWrapper
+foreign import setProps :: forall props r e. ShallowWrapper -> props -> Eff (enzyme :: ENZYME | e) r
 
 -- todo: setProps with callback
 -- foreign import setPropsFn
 
-foreign import setState :: forall state. ShallowWrapper -> state -> ShallowWrapper
+foreign import setState :: forall state e. ShallowWrapper -> state -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 -- todo: setState with callback
 -- foreign import setStateFn
 
-foreign import setContext :: forall ctx. ShallowWrapper -> ctx -> ShallowWrapper
+foreign import setContext :: forall ctx e. ShallowWrapper -> ctx -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import containsNode :: ShallowWrapper -> ReactElement -> Boolean
+foreign import containsNode :: forall e. ShallowWrapper -> ReactElement -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import containsNodes :: ShallowWrapper -> Array ReactElement -> Boolean
+foreign import containsNodes :: forall e. ShallowWrapper -> Array ReactElement -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import containsMatchingElement :: ShallowWrapper -> ReactElement -> Boolean
+foreign import containsMatchingElement :: forall e. ShallowWrapper -> ReactElement -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import containsAllMatchingElements :: ShallowWrapper -> Array ReactElement -> Boolean
+foreign import containsAllMatchingElements :: forall e. ShallowWrapper -> Array ReactElement -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import containsAnyMatchingElements :: ShallowWrapper -> Array ReactElement -> Boolean
+foreign import containsAnyMatchingElements :: forall e. ShallowWrapper -> Array ReactElement -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import equals :: ShallowWrapper -> ReactElement -> Boolean
+foreign import equals :: forall e. ShallowWrapper -> ReactElement -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import matchesElement :: ShallowWrapper -> ReactElement -> Boolean
+foreign import matchesElement :: forall e. ShallowWrapper -> ReactElement -> Eff (enzyme :: ENZYME | e) Boolean
 
 -- apriori we don't know what is the cls of the returned ShallowWrapper
-foreign import find :: ShallowWrapper -> String -> ShallowWrapper
+foreign import find :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-findReactClass :: forall props. ShallowWrapper -> ReactClass props -> ShallowWrapper 
+findReactClass :: forall props e. ShallowWrapper -> ReactClass props -> Eff (enzyme :: ENZYME | e) ShallowWrapper 
 findReactClass wrp cls = find wrp (unsafeCoerce cls)
 
 -- todo: find with callback
 -- foreign import findFn
 
-foreign import is :: ShallowWrapper -> String -> Boolean
+foreign import is :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import isEmptyRender :: ShallowWrapper -> Boolean
+foreign import isEmptyRender :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import filterWhere :: ShallowWrapper -> (ShallowWrapper -> Boolean) -> ShallowWrapper
+foreign import filterWhere :: forall e. ShallowWrapper -> (ShallowWrapper -> Boolean) -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import filter :: ShallowWrapper -> String -> ShallowWrapper
+foreign import filter :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 -- todo: filter with callback
 
-foreign import not :: ShallowWrapper -> String -> ShallowWrapper
+foreign import not :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 -- todo: not with callback
 
-foreign import text :: ShallowWrapper -> String
+foreign import text :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
 
-foreign import html :: ShallowWrapper -> String
+foreign import html :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
 
 -- todo CheerioWrapper
 -- foreign import render :: ShallowWrapper -> CheerioWrapper
 
-foreign import unmount :: ShallowWrapper -> ShallowWrapper
+foreign import unmount :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import simulate :: ShallowWrapper -> String -> ShallowWrapper
+foreign import simulate :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import simulateWithArgs :: ShallowWrapper -> String -> Array Foreign -> ShallowWrapper
+foreign import simulateWithArgs :: forall e. ShallowWrapper -> String -> Array Foreign -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import props :: ShallowWrapper -> Foreign
+foreign import props :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
 
-foreign import state :: ShallowWrapper -> String -> Foreign
+foreign import state :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) Foreign
 
-foreign import context :: ShallowWrapper -> String -> Foreign
+foreign import context :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) Foreign
 
-foreign import children :: ShallowWrapper -> ShallowWrapper
+foreign import children :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import childrenBySelector :: ShallowWrapper -> String -> ShallowWrapper
+foreign import childrenBySelector :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 -- todo: children with callback
 
-foreign import childAt :: ShallowWrapper -> Int -> ShallowWrapper
+foreign import childAt :: forall e. ShallowWrapper -> Int -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import parents :: ShallowWrapper -> String -> ShallowWrapper
+foreign import parents :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 -- todo: parents with callback
 
-foreign import parent :: ShallowWrapper -> ShallowWrapper
+foreign import parent :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import closest :: ShallowWrapper -> String -> ShallowWrapper
+foreign import closest :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import shallow :: ShallowWrapper -> Foreign -> ShallowWrapper
+foreign import shallow :: forall e. ShallowWrapper -> Foreign -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 -- todo: closest with callback
 
-foreign import prop :: ShallowWrapper -> String -> Foreign
+foreign import prop :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) Foreign
 
-foreign import key :: ShallowWrapper -> String
+foreign import key :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
 
-foreign import type_ :: ShallowWrapper -> String
+foreign import type_ :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
 
-foreign import name :: ShallowWrapper -> String
+foreign import name :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
 
-foreign import hasClass :: ShallowWrapper -> String -> Boolean
+foreign import hasClass :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) Boolean
 
 -- foreign import forEach :: ShallowWrapper -> (ReactElement -> Unit) -> ShallowWrapper
 
-foreign import map :: forall a. ShallowWrapper -> (ReactElement -> a) -> Array a
+foreign import map :: forall a e. ShallowWrapper -> (ReactElement -> a) -> Eff (enzyme :: ENZYME | e) (Array a)
 
-foreign import reduce :: forall a. ShallowWrapper -> (a -> ShallowWrapper -> a) -> a -> a
+foreign import reduce :: forall a e. ShallowWrapper -> (a -> ShallowWrapper -> a) -> a -> Eff (enzyme :: ENZYME | e) a
 
-foreign import reduceRight :: forall a. ShallowWrapper -> (a -> ShallowWrapper -> a) -> a -> a
+foreign import reduceRight :: forall a e. ShallowWrapper -> (a -> ShallowWrapper -> a) -> a -> Eff (enzyme :: ENZYME | e) a
 
-foreign import slice :: ShallowWrapper -> Int -> Int -> ShallowWrapper
+foreign import slice :: forall e. ShallowWrapper -> Int -> Int -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import some :: ShallowWrapper -> String -> Boolean
+foreign import some :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) Boolean
 
 -- todo: some with callback
 
-foreign import someWhere :: ShallowWrapper -> (ShallowWrapper -> Boolean) -> Boolean
+foreign import someWhere :: forall e. ShallowWrapper -> (ShallowWrapper -> Boolean) -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import every :: ShallowWrapper -> String -> Boolean
+foreign import every :: forall e. ShallowWrapper -> String -> Eff (enzyme :: ENZYME | e) Boolean
 
 -- todo: every with callback
 
-foreign import everyWhere :: ShallowWrapper -> (ShallowWrapper -> Boolean) -> Boolean
+foreign import everyWhere :: forall e. ShallowWrapper -> (ShallowWrapper -> Boolean) -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import findWhere :: ShallowWrapper -> (ShallowWrapper -> Boolean) -> ShallowWrapper
+foreign import findWhere :: forall e. ShallowWrapper -> (ShallowWrapper -> Boolean) -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import get :: ShallowWrapper -> Int -> ReactElement
+foreign import get :: forall e. ShallowWrapper -> Int -> Eff (enzyme :: ENZYME | e) ReactElement
 
-foreign import at :: ShallowWrapper -> Int -> ShallowWrapper
+foreign import at :: forall e. ShallowWrapper -> Int -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import first :: ShallowWrapper -> ShallowWrapper
+foreign import first :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import last :: ShallowWrapper -> ShallowWrapper
+foreign import last :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import isEmpty :: ShallowWrapper -> Boolean
+foreign import isEmpty :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import exists :: ShallowWrapper -> Boolean
+foreign import exists :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) Boolean
 
-foreign import debug :: ShallowWrapper -> String
+foreign import debug :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
 
 -- todo: tap
 
-foreign import dive :: ShallowWrapper -> Foreign -> ShallowWrapper
+foreign import dive :: forall e. ShallowWrapper -> Foreign -> Eff (enzyme :: ENZYME | e) ShallowWrapper
