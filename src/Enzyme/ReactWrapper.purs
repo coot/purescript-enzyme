@@ -23,7 +23,7 @@ foreign import instance_ :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e)
 
 foreign import update :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactWrapper
 
-foreign import unmount :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactWrapper
+foreign import unmount :: forall e. ReactWrapper -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 
 foreign import mount :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactWrapper
 
