@@ -15,7 +15,6 @@ install:
   - tar -xvf $HOME/purescript.tar.gz -C $HOME/
   - chmod a+x $HOME/purescript
   - npm install -g bower
-  - npm install pulp
   - npm install
 script:
   - bower install --production
