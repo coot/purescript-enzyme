@@ -3,15 +3,17 @@ module Enzyme.Mount
   , mountWithOptions
   ) where
 
-import Prelude (($))
+import Control.Monad.Eff (Eff)
+import DOM (DOM)
 import DOM.Node.Types (Node)
-import Data.Maybe (Maybe(..), maybe)
 import Data.Foreign (Foreign, toForeign)
+import Data.Maybe (Maybe(..), maybe)
 import Data.Record.Class (class Subrow)
-import Enzyme.ReactWrapper (ReactWrapper)
-import React (ReactElement)
-
 import Enzyme.Internals (undefined, unsafeMerge)
+import Enzyme.ReactWrapper (ReactWrapper)
+import Enzyme.Types (ENZYME)
+import Prelude (($))
+import React (ReactElement)
 
 type Mandatory r = (|r) :: # Type
 type Optional r = (attachTo :: Maybe Node, context :: Foreign | r)
@@ -28,18 +30,18 @@ mergeOpts
   -> Record (Optional s)
 mergeOpts o = unsafeMerge o defaults 
 
-foreign import _mount :: ReactElement -> Foreign -> ReactWrapper
+foreign import _mount :: forall e. ReactElement -> Foreign -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 
-mount :: ReactElement -> ReactWrapper
+mount :: forall e. ReactElement -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 mount e = _mount e (toForeign {})
 
 mountWithOptions
-  :: forall r s t
+  :: forall r s t e
    .  Union s (Optional ()) (Optional r)
   => Union r t (Optional ())
   => ReactElement
   -> { | s :: # Type }
-  -> ReactWrapper
+  -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 mountWithOptions e o = _mount e $
             toForeign
               { attachTo: maybe (toForeign undefined) toForeign opts.attachTo
