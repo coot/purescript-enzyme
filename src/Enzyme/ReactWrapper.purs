@@ -25,19 +25,19 @@ foreign import update :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) Re
 
 foreign import unmount :: forall e. ReactWrapper -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 
-foreign import mount :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactWrapper
+foreign import mount :: forall e. ReactWrapper -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 
-foreign import setProps :: forall props e. ReactWrapper -> props -> Eff (enzyme :: ENZYME | e) ReactWrapper
+foreign import setProps :: forall props e. ReactWrapper -> props -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 
 -- todo: setProps with callback
 -- foreign import setPropsFn
 
-foreign import setState :: forall state e. ReactWrapper -> state -> Eff (enzyme :: ENZYME | e) ReactWrapper
+foreign import setState :: forall state e. ReactWrapper -> state -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 
 -- todo: setState with callback
 -- foreign import setStateFn
 
-foreign import setContext :: forall ctx e. ReactWrapper -> ctx -> Eff (enzyme :: ENZYME | e) ReactWrapper
+foreign import setContext :: forall ctx e. ReactWrapper -> ctx -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 
 foreign import matchesElement :: forall e. ReactWrapper -> ReactElement -> Eff (enzyme :: ENZYME | e) Boolean
 
@@ -81,9 +81,9 @@ foreign import html :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) Stri
 -- todo CheerioWrapper
 -- foreign import render :: ReactWrapper -> CheerioWrapper
 
-foreign import simulate :: forall e. ReactWrapper -> String -> Eff (enzyme :: ENZYME | e) ReactWrapper
+foreign import simulate :: forall e. ReactWrapper -> String -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 
-foreign import simulateAndMock :: forall e. ReactWrapper -> String -> Foreign -> Eff (enzyme :: ENZYME | e) ReactWrapper
+foreign import simulateAndMock :: forall e. ReactWrapper -> String -> Foreign -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 
 foreign import props :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) Foreign
 
