@@ -116,7 +116,21 @@ foreign import prop :: forall e. String -> ReactWrapper -> Eff (enzyme :: ENZYME
 
 foreign import key :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) String
 
-foreign import type_ :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) String
+foreign import typeImpl :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) Foreign
+
+-- todo: I am not sure if `ReactClass` is what is returened
+type_ :: forall p e. ReactWrapper -> Eff (enzyme :: ENZYME | e) (Either String (ReactClass p))
+type_ wrp = do
+  f <- typeImpl wrp
+  pure (readForeign f)
+
+ where
+   readForeign :: Foreign -> Either String (ReactClass p)
+   readForeign obj =
+     case runExcept (readString obj) of
+       Left _ -> Right (unsafeCoerce obj)
+       Right s -> Left s
+
 
 foreign import name :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) String
 

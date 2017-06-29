@@ -287,7 +287,7 @@ exports.key = function(wrp) {
   }
 }
 
-exports.type_ = function(wrp) {
+exports.typeImpl = function(wrp) {
   return function() {
     return wrp.type()
   }
