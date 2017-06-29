@@ -259,7 +259,13 @@ exports.childAt = function(idx) {
   }
 }
 
-exports.parents = function(selector) {
+exports.parents = function(wrp) {
+  return function() {
+    return wrp.parents()
+  }
+}
+
+exports.parentsBySelector = function(selector) {
   return function(wrp) {
     return function() {
       return wrp.parents(selector)
@@ -267,11 +273,9 @@ exports.parents = function(selector) {
   }
 }
 
-exports.parent = function(selector) {
-  return function(wrp) {
-    return function() {
-      return wrp.parent(selector)
-    }
+exports.parent = function(wrp) {
+  return function() {
+    return wrp.parent()
   }
 }
 

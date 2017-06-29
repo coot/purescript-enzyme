@@ -98,7 +98,9 @@ foreign import childrenBySelector :: forall e. String -> ShallowWrapper -> Eff (
 
 foreign import childAt :: forall e. Int -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
-foreign import parents :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
+foreign import parents :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
+
+foreign import parentsBySelector :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 -- todo: parents with callback
 
