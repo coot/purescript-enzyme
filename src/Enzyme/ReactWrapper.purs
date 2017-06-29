@@ -17,7 +17,7 @@ foreign import getNodes :: ReactWrapper -> Array ReactElement
 
 foreign import getDOMNode :: ReactWrapper -> HTMLElement
 
-foreign import ref :: ReactWrapper -> String -> HTMLElement
+foreign import ref :: ReactWrapper -> String -> ReactWrapper
 
 foreign import instance_ :: ReactWrapper -> ReactClassInstance
 
