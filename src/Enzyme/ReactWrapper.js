@@ -20,8 +20,8 @@ exports.getDOMNode = function(wrp) {
   }
 }
 
-exports.ref = function(wrp) {
-  return function(refname) {
+exports.ref = function(refname) {
+  return function(wrp) {
     return function() {
       return wrp.ref(refname)
     }
@@ -52,88 +52,88 @@ exports.mount = function(wrp) {
   }
 }
 
-exports.setProps = function(wrp) {
-  return function(props) {
+exports.setProps = function(props) {
+  return function(wrp) {
     return function() {
       return wrp.setProps(props)
     }
   }
 }
 
-exports.setState = function(wrp) {
-  return function(state) {
+exports.setState = function(state) {
+  return function(wrp) {
     return function() {
       return wrp.setState(state)
     }
   }
 }
 
-exports.setContext = function(wrp) {
-  return function(ctx) {
+exports.setContext = function(ctx) {
+  return function(wrp) {
     return function() {
       return wrp.setContext(ctx)
     }
   }
 }
 
-exports.matchesElement = function(wrp) {
-  return function(node) {
+exports.matchesElement = function(node) {
+  return function(wrp) {
     return function() {
       return wrp.matchesElement(node)
     }
   }
 }
 
-exports.containsNode = function(wrp) {
-  return function(node) {
+exports.containsNode = function(node) {
+  return function(wrp) {
     return function() {
       return wrp.contains(node)
     }
   }
 }
 
-exports.containsNodes = function(wrp) {
-  return function(nodes) {
+exports.containsNodes = function(nodes) {
+  return function(wrp) {
     return function() {
       return wrp.contains(nodes)
     }
   }
 }
 
-exports.containsMatchingElement = function(wrp) {
-  return function(node) {
+exports.containsMatchingElement = function(node) {
+  return function(wrp) {
     return function() {
       return wrp.containsMatchingElement(node)
     }
   }
 }
 
-exports.containsAllMatchingElements = function(wrp) {
-  return function(nodes) {
+exports.containsAllMatchingElements = function(nodes) {
+  return function(wrp) {
     return function() {
       return wrp.containsAllMatchingElement(nodes)
     }
   }
 }
 
-exports.containsAnyMatchingElements = function(wrp) {
-  return function(nodes) {
+exports.containsAnyMatchingElements = function(nodes) {
+  return function(wrp) {
     return function() {
       return wrp.containsAnyMatchingElement(nodes)
     }
   }
 }
 
-exports.find = function(wrp) {
-  return function(selector) {
+exports.find = function(selector) {
+  return function(wrp) {
     return function() {
       return wrp.find(selector)
     }
   }
 }
 
-exports.is = function(wrp) {
-  return function(selector) {
+exports.is = function(selector) {
+  return function(wrp) {
     return function() {
       return wrp.is(selector)
     }
@@ -146,24 +146,24 @@ exports.isEmptyRender = function(wrp) {
   }
 }
 
-exports.filterWhere = function(wrp) {
-  return function(predicate) {
+exports.filterWhere = function(predicate) {
+  return function(wrp) {
     return function() {
       return wrp.filterWhere(predicate)
     }
   }
 }
 
-exports.filter = function(wrp) {
-  return function(selector) {
+exports.filter = function(selector) {
+  return function(wrp) {
     return function() {
       return wrp.filter(selector)
     }
   }
 }
 
-exports.not = function(wrp) {
-  return function(selector) {
+exports.not = function(selector) {
+  return function(wrp) {
     return function() {
       return wrp.not(selector)
     }
@@ -182,17 +182,17 @@ exports.html = function(wrp) {
   }
 }
 
-exports.simulate = function(wrp) {
-  return function(ev) {
+exports.simulate = function(ev) {
+  return function(wrp) {
     return function() {
       return wrp.simulate(ev)
     }
   }
 }
 
-exports.simulateAndMock = function(wrp) {
-  return function(ev) {
-    return function(mock) {
+exports.simulateAndMock = function(ev) {
+  return function(mock) {
+    return function(wrp) {
       return function() {
         return wrp.simulateAndMock(ev, mock)
       }
@@ -206,16 +206,16 @@ exports.props = function(wrp) {
   }
 }
 
-exports.state = function(wrp) {
-  return function(name) {
+exports.state = function(name) {
+  return function(wrp) {
     return function() {
       return wrp.state(name)
     }
   }
 }
 
-exports.context = function(wrp) {
-  return function(name) {
+exports.context = function(name) {
+  return function(wrp) {
     return function() {
       return wrp.context(name)
     }
@@ -228,16 +228,16 @@ exports.children = function(wrp) {
   }
 }
 
-exports.childrenBySelector = function(wrp) {
-  return function(selector) {
+exports.childrenBySelector = function(selector) {
+  return function(wrp) {
     return function() {
       return wrp.children(selector)
     }
   }
 }
 
-exports.childAt = function(wrp) {
-  return function(idx) {
+exports.childAt = function(idx) {
+  return function(wrp) {
     return function() {
       return wrp.childAt(idx)
     }
@@ -245,7 +245,14 @@ exports.childAt = function(wrp) {
 }
 
 exports.parents = function(wrp) {
-  return function(selector) {
+  return function() {
+    return wrp.parents()
+  }
+}
+
+
+exports.parentsBySelector = function(selector) {
+  return function(wrp) {
     return function() {
       return wrp.parents(selector)
     }
@@ -253,23 +260,21 @@ exports.parents = function(wrp) {
 }
 
 exports.parent = function(wrp) {
-  return function(selector) {
-    return function() {
-      return wrp.parent(selector)
-    }
+  return function() {
+    return wrp.parent(selector)
   }
 }
 
-exports.closest = function(wrp) {
-  return function(selector) {
+exports.closest = function(selector) {
+  return function(wrp) {
     return function() {
       return wrp.closest(selector)
     }
   }
 }
 
-exports.prop = function(wrp) {
-  return function(propName) {
+exports.prop = function(propName) {
+  return function(wrp) {
     return function() {
       return wrp.prop(propName)
     }
@@ -294,25 +299,25 @@ exports.name = function(wrp) {
   }
 }
 
-exports.hasClass = function(wrp) {
-  return function(clsName) {
+exports.hasClass = function(clsName) {
+  return function(wrp) {
     return function() {
       return wrp.hasClass(clsName)
     }
   }
 }
 
-exports.map = function(wrp) {
-  return function(fn) {
+exports.map = function(fn) {
+  return function(wrp) {
     return function() {
       return wrp.map(fn)
     }
   }
 }
 
-exports.reduce = function(wrp) {
-  return function(fn) {
-    return function(acu) {
+exports.reduce = function(fn) {
+  return function(acu) {
+    return function(wrp) {
       return function() {
         return wrp.reduce(fn, acu)
       }
@@ -320,9 +325,9 @@ exports.reduce = function(wrp) {
   }
 }
 
-exports.reduceRight = function(wrp) {
-  return function(fn) {
-    return function(acu) {
+exports.reduceRight = function(fn) {
+  return function(acu) {
+    return function(wrp) {
       return function() {
         return wrp.reduceRight(fn, acu)
       }
@@ -330,9 +335,9 @@ exports.reduceRight = function(wrp) {
   }
 }
 
-exports.slice = function(wrp) {
-  return function(begin) {
-    return function(end) {
+exports.slice = function(begin) {
+  return function(end) {
+    return function(wrp) {
       return function() {
         return wrp.slice(begin, end)
       }
@@ -340,64 +345,64 @@ exports.slice = function(wrp) {
   }
 }
 
-exports.some = function(wrp) {
-  return function(selector) {
+exports.some = function(selector) {
+  return function(wrp) {
     return function() {
       return wrp.some(selector)
     }
   }
 }
 
-exports.someWhere = function(wrp) {
-  return function(fn) {
+exports.someWhere = function(fn) {
+  return function(wrp) {
     return function() {
       return wrp.someWhere(fn)
     }
   }
 }
 
-exports.every = function(wrp) {
-  return function(selector) {
+exports.every = function(selector) {
+  return function(wrp) {
     return function() {
       return wrp.every(selector)
     }
   }
 }
 
-exports.everyWhere = function(wrp) {
-  return function(fn) {
+exports.everyWhere = function(fn) {
+  return function(wrp) {
     return function() {
       return wrp.everyWhere(fn)
     }
   }
 }
 
-exports.get = function(wrp) {
-  return function(idx) {
+exports.get = function(idx) {
+  return function(wrp) {
     return function() {
       return wrp.get(idx)
     }
   }
 }
 
-exports.at = function(wrp) {
-  return function(idx) {
+exports.at = function(idx) {
+  return function(wrp) {
     return function() {
       return wrp.at(idx)
     }
   }
 }
 
-exports.first = function(wrp) {
-  return function(idx) {
+exports.first = function(idx) {
+  return function(wrp) {
     return function() {
       return wrp.first(idx)
     }
   }
 }
 
-exports.last = function(wrp) {
-  return function(idx) {
+exports.last = function(idx) {
+  return function(wrp) {
     return function() {
       return wrp.last(idx)
     }
