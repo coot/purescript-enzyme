@@ -21,11 +21,11 @@ foreign import ref :: ReactWrapper -> String -> ReactWrapper
 
 foreign import instance_ :: ReactWrapper -> ReactClassInstance
 
-foreign import update :: ReactWrapper -> Eff (enzyme :: ENZYME) ReactWrapper
+foreign import update :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactWrapper
 
-foreign import unmount :: ReactWrapper -> Eff (enzyme :: ENZYME) ReactWrapper
+foreign import unmount :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactWrapper
 
-foreign import mount :: ReactWrapper -> Eff (enzyme :: ENZYME) ReactWrapper
+foreign import mount :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactWrapper
 
 foreign import setProps :: forall props. ReactWrapper -> props -> ReactWrapper
 
@@ -157,4 +157,4 @@ foreign import debug :: ReactWrapper -> String
 
 -- todo: tap
 
-foreign import detach :: ReactWrapper -> Eff (dom :: DOM) Unit
+foreign import detach :: forall e. ReactWrapper -> Eff (dom :: DOM, enzyme :: ENZYME | e) Unit
