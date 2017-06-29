@@ -1,9 +1,15 @@
 module Test.Main where
 
 import Prelude
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
 
-main :: forall e. Eff (console :: CONSOLE | e) Unit
-main = do
-  log "You should add some tests."
+import Control.Monad.Aff.AVar (AVAR)
+import Control.Monad.Eff (Eff)
+import Control.Monad.Eff.Console (CONSOLE)
+import DOM (DOM)
+import Enzyme.Types (ENZYME)
+import Test.ReactWrapper (testSuite) as ReactWrapper
+import Test.Unit.Karma (runKarma)
+
+main :: forall e. Eff (avar :: AVAR, console :: CONSOLE, dom :: DOM, enzyme :: ENZYME | e) Unit
+main = runKarma do
+  ReactWrapper.testSuite
