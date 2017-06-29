@@ -1,8 +1,75 @@
-module Enzyme.ShallowWrapper where
+module Enzyme.ShallowWrapper
+  ( ShallowWrapper
+  , getNode
+  , getNodes
+  , ref
+  , instance_
+  , update
+  , rerender
+  , rerenderWithContext
+  , setProps
+  , setState
+  , setContext
+  , containsNode
+  , containsNodes
+  , containsMatchingElement
+  , containsAllMatchingElements
+  , containsAnyMatchingElements
+  , equals
+  , matchesElement
+  , find
+  , findReactClass
+  , is
+  , isEmptyRender
+  , filterWhere
+  , filter
+  , not
+  , text
+  , html
+  , unmount
+  , simulate
+  , simulateWithArgs
+  , props
+  , state
+  , context
+  , children
+  , childrenBySelector
+  , childAt
+  , parents
+  , parentsBySelector
+  , parent
+  , closest
+  , shallow
+  , prop
+  , key
+  , type_
+  , name
+  , hasClass
+  , map
+  , reduce
+  , reduceRight
+  , slice
+  , some
+  , someWhere
+  , every
+  , everyWhere
+  , findWhere
+  , get
+  , at
+  , first
+  , last
+  , isEmpty
+  , exists
+  , debug
+  , dive 
+  ) where
 
 import Control.Monad.Eff (Eff)
-import Data.Foreign (Foreign)
+import Control.Monad.Except (runExcept)
+import Data.Either (Either(..))
+import Data.Foreign (Foreign, isNull, readString)
 import Enzyme.Types (ENZYME, ReactClassInstance)
+import Prelude (bind, pure)
 import React (ReactClass, ReactElement)
 import Unsafe.Coerce (unsafeCoerce)
 
@@ -116,7 +183,21 @@ foreign import prop :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZY
 
 foreign import key :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
 
-foreign import type_ :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
+foreign import typeImpl :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
+
+type_ :: forall e p. ShallowWrapper -> Eff (enzyme :: ENZYME | e) (Either String (ReactClass p))
+type_ wrp = do
+  f <- typeImpl wrp
+  pure (readForeign f)
+
+ where
+   readForeign :: Foreign -> Either String (ReactClass p)
+   readForeign obj =
+     if isNull obj
+       then Left ""
+       else case runExcept (readString obj) of
+        Left _ -> Right (unsafeCoerce obj)
+        Right s -> Left s
 
 foreign import name :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
 
@@ -126,9 +207,9 @@ foreign import hasClass :: forall e. String -> ShallowWrapper -> Eff (enzyme :: 
 
 foreign import map :: forall a e. ShallowWrapper -> (ReactElement -> a) -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) (Array a)
 
-foreign import reduce :: forall a e. (a -> ShallowWrapper -> a) -> a -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) a
+foreign import reduce :: forall a e. (a -> ShallowWrapper -> Int -> a) -> a -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) a
 
-foreign import reduceRight :: forall a e. (a -> ShallowWrapper -> a) -> a -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) a
+foreign import reduceRight :: forall a e. (a -> ShallowWrapper -> Int -> a) -> a -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) a
 
 foreign import slice :: forall e. Int -> Int -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
