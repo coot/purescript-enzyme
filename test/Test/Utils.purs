@@ -10,12 +10,13 @@ import Enzyme.ReactWrapper as RW
 import Enzyme.Shallow (shallow)
 import Enzyme.ShallowWrapper as SW
 import Enzyme.Types (ENZYME)
-import Enzyme.Utils (isValidElement)
-import Prelude (bind, discard, pure, unit, ($), (<$>), (>>=))
-import React (createClass, createClassStateless, createElement, spec)
+import Enzyme.Utils (isInstanceOf, isValidElement)
+import Prelude (Unit, bind, discard, pure, unit, void, ($), (<$>), (>>=))
+import React (ReactClass, createClass, createClassStateless, createElement, spec, writeState)
 import React.DOM as D
 import Test.Unit (TestSuite, suite, test)
 import Test.Unit.Assert (assert)
+import Type.Proxy (Proxy(..))
 
 testSuite :: forall e. TestSuite (dom :: DOM, enzyme :: ENZYME | e)
 testSuite = suite "Utils" do
@@ -69,3 +70,22 @@ testSuite = suite "Utils" do
         e2 <- liftEff do
           shallow (D.div' [ D.main' [], D.div'[], D.span' [] ]) >>= SW.children >>= SW.get 0
         assert "is not valid react element" (isValidElement e2)
+
+    suite "isInstanceOf" do
+      test "react class" do
+        let
+            c :: ReactClass Unit
+            c = createClass ((spec false (\_ -> pure $ D.div' [])) { componentDidMount = componentDidMount })
+
+            componentDidMount this = do
+              void $ writeState this (isInstanceOf this c)
+
+        st1 <- liftEff do
+          mount (createElement c unit []) >>= RW.unsafeState (Proxy :: Proxy Boolean)
+
+        assert "element was not instance of its class" st1
+
+        st2 <- liftEff do
+          shallow (createElement c unit []) >>= SW.unsafeState (Proxy :: Proxy Boolean)
+
+        assert "element was not instance of its class" st1
