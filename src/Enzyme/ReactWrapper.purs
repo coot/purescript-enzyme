@@ -102,7 +102,7 @@ foreign import setProps :: forall props e. props -> ReactWrapper -> Eff (dom :: 
 -- todo: setProps with callback
 -- foreign import setPropsFn
 
--- | Set state of your component.  Note that it will wrap as `{ state: state }`,
+-- | Set state of your component.  Note that it will wrap state as `{ state: state }`,
 -- | since this is what `purescript-react` does in it's own bindings.
 setState :: forall state e. state -> ReactWrapper -> Eff (dom :: DOM, enzyme :: ENZYME | e) ReactWrapper
 setState st = setState_ (toForeign { state: st })
@@ -166,8 +166,8 @@ foreign import prop :: forall e. String -> ReactWrapper -> Eff (enzyme :: ENZYME
 foreign import props :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) Foreign
 
 -- | Note that `purescript-react` writes state as `{ state: state }`
--- | (so you can use any purescript value as state).  This function will unwrap
--- | the state and return what you specified in your `ReactSpec` signature.
+-- | (so you can use any purescript value as a state).  This function will unwrap
+-- | state and return what you specified in your `ReactSpec` signature.
 -- |
 -- | Use `runExcept $ join ((readState :: Foreign -> State) <$> state)` to read
 -- | the state from `F Foreign`.

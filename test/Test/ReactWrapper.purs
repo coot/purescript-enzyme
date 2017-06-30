@@ -9,7 +9,6 @@ module Test.ReactWrapper
   , cProps
   , isReactWrapper
   , isThrowing
-  , unsafeGetReactElement
   ) where
 
 import Control.Monad.Aff.Console (CONSOLE, log)
@@ -77,8 +76,6 @@ readCState obj = do
 
 derive instance newtypeCState :: Newtype CState _
 
-foreign import unsafeGetReactElement :: ReactElement -> ReactElement
-
 foreign import isReactWrapper :: ReactWrapper -> Boolean
 
 foreign import isThrowing :: forall e a. Eff e a -> Eff e Boolean
@@ -116,14 +113,14 @@ testSuite = suite "ReactWrapper" do
     el <- liftEff do
       wrp <- mount $ createElement cls cProps []
       E.getNode wrp
-    assert "its not a valid element" (isValidElement $ unsafeGetReactElement el)
+    assert "its not a valid element" (isValidElement el)
 
   test "getNodes" do
     els <- liftEff do
       wrp <- mount $ createElement cls cProps []
       E.getNodes wrp
     assert "got en empty array" $ length els > 0
-    assert "one node wasn't a react element" $ ala Conj foldMap (isValidElement <<< unsafeGetReactElement <$> els)
+    assert "one node wasn't a react element" $ ala Conj foldMap (isValidElement <$> els)
 
   test "getDOMNode" do
     f <- liftEff do
@@ -386,7 +383,7 @@ testSuite = suite "ReactWrapper" do
     re <- liftEff do
       mount (createElement cls cProps []) >>= E.get 0
 
-    assert "" (isValidElement $ unsafeGetReactElement re)
+    assert "" (isValidElement re)
 
   test "first" do
     ElementId id_ <- liftEff do
