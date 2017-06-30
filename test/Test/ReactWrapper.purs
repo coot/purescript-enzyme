@@ -3,6 +3,7 @@ module Test.ReactWrapper
   , CProps(..)
   , CState(..)
   , readCProps
+  , readCState
   , cls
   , cState
   , cProps
@@ -15,6 +16,7 @@ module Test.ReactWrapper
 import Control.Monad.Aff.Console (CONSOLE, log)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
+import Control.Monad.Eff.Console (log) as Eff
 import Control.Monad.Except (runExcept)
 import DOM (DOM)
 import DOM.HTML (window)
@@ -28,8 +30,8 @@ import DOM.Node.ParentNode (QuerySelector(..), querySelector)
 import DOM.Node.Types (Element, ElementId(ElementId), documentToNonElementParentNode, documentToParentNode, elementToNode)
 import Data.Array (length)
 import Data.Either (Either(..), isRight)
-import Data.Foldable (foldMap)
-import Data.Foreign (F, Foreign, readInt, readString, toForeign)
+import Data.Foldable (foldMap, intercalate)
+import Data.Foreign (F, Foreign, readInt, readString, renderForeignError, toForeign)
 import Data.Foreign.Index ((!))
 import Data.Maybe (Maybe(..), fromJust, isJust)
 import Data.Monoid.Conj (Conj(..))
@@ -39,7 +41,7 @@ import Enzyme.ReactWrapper (ReactWrapper)
 import Enzyme.ReactWrapper as E
 import Enzyme.Types (ENZYME)
 import Partial.Unsafe (unsafePartial)
-import Prelude (bind, discard, id, not, pure, show, void, ($), (+), (<$>), (<<<), (<>), (==), (>), (>>=))
+import Prelude (bind, discard, id, join, not, pure, show, void, ($), (+), (<$>), (<<<), (<>), (==), (>), (>>=))
 import React (ReactClass, ReactElement, createClass, createElement, getChildren, getProps, readState, spec, transformState)
 import React.DOM as D
 import React.DOM.Props as P
@@ -199,14 +201,26 @@ testSuite = suite "ReactWrapper" do
       Left _ -> failure "did not read props from foreign value"
       Right (CProps { id: id_ }) -> assert "did not set props" $ id_ == "ok"
 
-  test "setState & state" do
-    fc <- liftEff do
-      wrp <- mount (createElement cls cProps []) >>= E.setState (CState { c: 1 })
-      E.state "c" wrp
+  suite "state" do
+    test "setState & stateByKey" do
+      fc <- liftEff do
+        wrp <- mount (createElement cls cProps []) >>= E.setState (CState { c: 1 })
+        E.stateByKey "c" wrp
 
-    case runExcept (readInt fc) of
-      Left _ -> failure "did not read counter from foreign value"
-      Right c -> assert "did not set state" $ c == 1
+      case runExcept (readInt fc) of
+        Left errs -> failure $ "did not read counter from foreign value: " <> (intercalate "; " (renderForeignError <$> errs))
+        Right c -> assert "did not set state" $ c == 1
+
+    test "state" do
+      fst <- liftEff do
+        wrp <- mount (createElement cls cProps [])
+        _ <- E.state wrp
+        wrp' <- E.setState (CState { c: 1 }) wrp
+        E.state wrp'
+
+      case runExcept (join (readCState <$> fst)) of
+        Left errs -> failure $ "did not read counter from foreign value: " <> (intercalate "; " (renderForeignError <$> errs))
+        Right (CState {c}) -> assert ("did not set state: got " <> show c) $ c == 1
   
   test "setContext & context" do
     fctx <- liftEff do
@@ -221,6 +235,15 @@ testSuite = suite "ReactWrapper" do
       -   Left _ -> failure "did not read ctx from foreign value"
       -   Right c -> assert "did not set state" $ c == 1
       --}
+
+  test "simulate & state" do
+    fst <- liftEff do
+      wrp <- mount (createElement cls cProps []) >>= E.simulate "click"
+      E.state wrp
+
+    case runExcept (join (readCState <$> fst)) of
+      Left errs -> failure $ "did not read counter from foreign value: " <> (intercalate "; " (renderForeignError <$> errs))
+      Right (CState {c}) -> assert "did not update the state" $ c == 1
 
   test "children & at" do
     children <- liftEff do

@@ -8,6 +8,7 @@ module Enzyme.ShallowWrapper
   , rerenderWithContext
   , setProps
   , setState
+  , setState_
   , setContext
   , containsNode
   , containsNodes
@@ -29,7 +30,10 @@ module Enzyme.ShallowWrapper
   , simulate
   , simulateWithArgs
   , props
+  , prop
   , state
+  , state_
+  , stateByKey
   , context
   , children
   , childrenBySelector
@@ -39,7 +43,6 @@ module Enzyme.ShallowWrapper
   , parent
   , closest
   , shallow
-  , prop
   , key
   , type_
   , name
@@ -66,7 +69,8 @@ module Enzyme.ShallowWrapper
 import Control.Monad.Eff (Eff)
 import Control.Monad.Except (runExcept)
 import Data.Either (Either(..))
-import Data.Foreign (Foreign, isNull, readString)
+import Data.Foreign (Foreign, F, isNull, readString, toForeign)
+import Data.Foreign.Index (readProp)
 import Enzyme.Types (ENZYME, ReactClassInstance)
 import Prelude (bind, pure)
 import React (ReactClass, ReactElement)
@@ -91,7 +95,13 @@ foreign import setProps :: forall props r e. props -> ShallowWrapper -> Eff (enz
 -- todo: setProps with callback
 -- foreign import setPropsFn
 
-foreign import setState :: forall state e. state -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
+-- | Set state of your component.  Note that it will wrap as `{ state: state }`,
+-- | since this is what `purescript-react` does in it's own bindings.
+setState :: forall state e. state -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
+setState st = setState_ (toForeign { state: st })
+
+-- | The original which does not wrap state
+foreign import setState_ :: forall e. Foreign -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 -- todo: setState with callback
 -- foreign import setStateFn
@@ -150,7 +160,23 @@ foreign import simulateWithArgs :: forall e. String -> Array Foreign -> ShallowW
 
 foreign import props :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
 
-foreign import state :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
+foreign import prop :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
+
+-- | Note that `purescript-react` writes state as `{ state: state }`
+-- | (so you can use any purescript value as state).  This function will unwrap
+-- | the state and return something of the type in your `ReactSpec` signature.
+-- |
+-- | Use `runExcept $ join ((readState :: Foreign -> State) <$> state)` to read
+-- | the state from `F Foreign`.
+state :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) (F Foreign)
+state wrp = do
+  st <- state_ wrp
+  pure (readProp "state" st)
+
+-- | The original which does not unwrap the state.
+foreign import state_ :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
+
+foreign import stateByKey :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
 
 foreign import context :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
 
@@ -175,8 +201,6 @@ foreign import closest :: forall e. String -> ShallowWrapper -> Eff (enzyme :: E
 foreign import shallow :: forall e. Foreign -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 -- todo: closest with callback
-
-foreign import prop :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
 
 foreign import key :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) String
 

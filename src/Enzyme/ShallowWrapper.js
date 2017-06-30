@@ -52,7 +52,7 @@ exports.setProps = function(props) {
   }
 }
 
-exports.setState = function(state) {
+exports.setState_ = function(state) {
   return function(wrp) {
     return function() {
       return wrp.setState(state)
@@ -207,16 +207,28 @@ exports.simulateWithArgs = function(ev) {
   }
 }
 
+exports.prop = function(key) {
+  return function(wrp) {
+    return wpr.prop(key)
+  }
+}
+
 exports.props = function(wrp) {
   return function() {
     return wrp.props()
   }
 }
 
-exports.state = function(name) {
+exports.state_ = function(wrp) {
+  return function() {
+    return wrp.state()
+  }
+}
+
+exports.stateByKey = function(key) {
   return function(wrp) {
     return function() {
-      return wrp.state(name)
+      return wrp.state().state[key]
     }
   }
 }
@@ -283,14 +295,6 @@ exports.shallow = function(opts) {
   return function(wrp) {
     return function() {
       return wrp.shallow(opts)
-    }
-  }
-}
-
-exports.prop = function(propName) {
-  return function(wrp) {
-    return function() {
-      return wrp.prop(propName)
     }
   }
 }

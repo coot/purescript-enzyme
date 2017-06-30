@@ -60,7 +60,7 @@ exports.setProps = function(props) {
   }
 }
 
-exports.setState = function(state) {
+exports.setState_ = function(state) {
   return function(wrp) {
     return function() {
       return wrp.setState(state)
@@ -206,10 +206,17 @@ exports.props = function(wrp) {
   }
 }
 
-exports.state = function(name) {
+exports.state_ = function(wrp) {
+  return function() {
+    return wrp.state()
+  }
+}
+
+exports.stateByKey = function(name) {
   return function(wrp) {
     return function() {
-      return wrp.state(name)
+      var st = wrp.state()
+      return st.state[name]
     }
   }
 }

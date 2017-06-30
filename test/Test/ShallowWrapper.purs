@@ -19,11 +19,11 @@ import Enzyme.Shallow (shallow, shallowWithOptions)
 import Enzyme.ShallowWrapper (ShallowWrapper)
 import Enzyme.ShallowWrapper as E
 import Enzyme.Types (ENZYME)
-import Prelude (Unit, bind, discard, id, not, pure, show, unit, ($), (+), (<$>), (<>), (==), (>), (>>=))
+import Prelude (Unit, bind, discard, id, join, not, pure, show, unit, ($), (+), (<$>), (<>), (==), (>), (>>=))
 import React (ReactClass, createClass, createClassStateless, createElement, getChildren, getProps, readState, spec, transformState)
 import React.DOM as D
 import React.DOM.Props as P
-import Test.ReactWrapper (CProps(CProps), CState(CState), cProps, cState, isThrowing, isValidElement, readCProps)
+import Test.ReactWrapper (CProps(CProps), CState(CState), cProps, cState, isThrowing, isValidElement, readCProps, readCState)
 import Test.Unit (TestSuite, failure, suite, test)
 import Test.Unit.Assert (assert)
 import Unsafe.Coerce (unsafeCoerce)
@@ -110,14 +110,24 @@ testSuite = suite "ShallowWrapper" do
       Left _ -> failure "did not read props from foreign value"
       Right (CProps { id: id_ }) -> assert "did not set props" $ id_ == "ok"
 
-  test "setState & state" do
-    fc <- liftEff do
-      wrp <- shallow (createElement cls cProps []) >>= E.setState (CState { c: 1 })
-      E.state "c" wrp
+  suite "state" do
+    test "setState & stateByKey" do
+      fc <- liftEff do
+        wrp <- shallow (createElement cls cProps []) >>= E.setState (CState { c: 1 })
+        E.stateByKey "c" wrp
 
-    case runExcept (readInt fc) of
-      Left _ -> failure "did not read counter from foreign value"
-      Right c -> assert "did not set state" $ c == 1
+      case runExcept (readInt fc) of
+        Left _ -> failure "did not read counter from foreign value"
+        Right c -> assert "did not set state" $ c == 1
+
+    test "setState & state" do
+      fst <- liftEff do
+        wrp <- shallow (createElement cls cProps []) >>= E.setState (CState { c: 1 })
+        E.state wrp
+
+      case runExcept (join (readCState <$> fst)) of
+        Left _ -> failure "did not read counter from foreign value"
+        Right (CState {c}) -> assert "did not set state" $ c == 1
   
   test "setContext & context" do
     fctx <- liftEff do
