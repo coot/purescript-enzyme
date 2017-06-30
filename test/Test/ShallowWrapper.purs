@@ -19,12 +19,12 @@ import Enzyme.Shallow (shallow, shallowWithOptions)
 import Enzyme.ShallowWrapper (ShallowWrapper)
 import Enzyme.ShallowWrapper as E
 import Enzyme.Types (ENZYME)
-import Enzyme.Utils (isInstanceOf)
+import Enzyme.Utils (isInstanceOf, isValidElement)
 import Prelude (Unit, bind, discard, id, join, not, pure, show, unit, ($), (+), (<$>), (<>), (==), (>), (>>=))
 import React (ReactClass, createClass, createClassStateless, createElement, getChildren, getProps, readState, spec, transformState)
 import React.DOM as D
 import React.DOM.Props as P
-import Test.ReactWrapper (CProps(CProps), CState(CState), cProps, cState, isThrowing, isValidElement, readCProps, readCState)
+import Test.ReactWrapper (CProps(CProps), CState(CState), cProps, cState, isThrowing, readCProps, readCState)
 import Test.Unit (TestSuite, failure, suite, test)
 import Test.Unit.Assert (assert)
 import Unsafe.Coerce (unsafeCoerce)

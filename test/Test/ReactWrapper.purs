@@ -7,7 +7,6 @@ module Test.ReactWrapper
   , cls
   , cState
   , cProps
-  , isValidElement
   , isReactWrapper
   , isThrowing
   , unsafeGetReactElement
@@ -39,7 +38,7 @@ import Enzyme.Mount (mount, mountWithOptions)
 import Enzyme.ReactWrapper (ReactWrapper)
 import Enzyme.ReactWrapper as E
 import Enzyme.Types (ENZYME)
-import Enzyme.Utils (isInstanceOf)
+import Enzyme.Utils (isInstanceOf, isValidElement)
 import Partial.Unsafe (unsafePartial)
 import Prelude (bind, discard, id, join, not, pure, show, void, ($), (+), (<$>), (<<<), (<>), (==), (>), (>>=))
 import React (ReactClass, ReactElement, createClass, createElement, getChildren, getProps, readState, spec, transformState)
@@ -77,8 +76,6 @@ readCState obj = do
   pure (CState { c })
 
 derive instance newtypeCState :: Newtype CState _
-
-foreign import isValidElement :: ReactElement -> Boolean
 
 foreign import unsafeGetReactElement :: ReactElement -> ReactElement
 
@@ -144,7 +141,6 @@ testSuite = suite "ReactWrapper" do
     assert "" $ _id == (un CProps cProps).id
 
   test "instance_" do
-    log "instance_: TODO"
     inst <- liftEff do
       mount (createElement cls cProps [])
         >>= E.instance_
