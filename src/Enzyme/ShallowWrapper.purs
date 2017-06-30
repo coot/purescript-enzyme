@@ -71,9 +71,9 @@ import Control.Monad.Except (runExcept)
 import Data.Either (Either(..))
 import Data.Foreign (Foreign, F, isNull, readString, toForeign)
 import Data.Foreign.Index (readProp)
-import Enzyme.Types (ENZYME, ReactClassInstance)
+import Enzyme.Types (ENZYME)
 import Prelude (bind, pure)
-import React (ReactClass, ReactElement)
+import React (ReactClass, ReactElement, ReactThis)
 import Unsafe.Coerce (unsafeCoerce)
 
 foreign import data ShallowWrapper :: Type
@@ -82,7 +82,7 @@ foreign import getNode :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e)
 
 foreign import getNodes :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) (Array ReactElement)
 
-foreign import instance_ :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ReactClassInstance
+foreign import instance_ :: forall props state e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) (ReactThis props state)
 
 foreign import update :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 

@@ -71,9 +71,9 @@ import DOM.HTML.Types (HTMLElement)
 import Data.Either (Either(Left, Right))
 import Data.Foreign (Foreign, F, readString, toForeign)
 import Data.Foreign.Index (readProp)
-import Enzyme.Types (ENZYME, ReactClassInstance)
+import Enzyme.Types (ENZYME)
 import Prelude (Unit, bind, pure)
-import React (ReactClass, ReactElement)
+import React (ReactClass, ReactElement, ReactThis)
 import Unsafe.Coerce (unsafeCoerce)
 
 foreign import data ReactWrapper :: Type
@@ -87,7 +87,7 @@ foreign import getDOMNode :: forall e. ReactWrapper -> Eff (dom :: DOM, enzyme :
 
 foreign import ref :: forall e. String -> ReactWrapper -> Eff (enzyme :: ENZYME | e)  ReactWrapper
 
-foreign import instance_ :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactClassInstance
+foreign import instance_ :: forall e props state. ReactWrapper -> Eff (enzyme :: ENZYME | e) (ReactThis props state)
 
 foreign import update :: forall e. ReactWrapper -> Eff (enzyme :: ENZYME | e) ReactWrapper
 

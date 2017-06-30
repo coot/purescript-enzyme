@@ -19,6 +19,7 @@ import Enzyme.Shallow (shallow, shallowWithOptions)
 import Enzyme.ShallowWrapper (ShallowWrapper)
 import Enzyme.ShallowWrapper as E
 import Enzyme.Types (ENZYME)
+import Enzyme.Utils (isInstanceOf)
 import Prelude (Unit, bind, discard, id, join, not, pure, show, unit, ($), (+), (<$>), (<>), (==), (>), (>>=))
 import React (ReactClass, createClass, createClassStateless, createElement, getChildren, getProps, readState, spec, transformState)
 import React.DOM as D
@@ -79,7 +80,10 @@ testSuite = suite "ShallowWrapper" do
     assert "one node wasn't a react element" $ ala Conj foldMap (isValidElement <$> els)
 
   test "instance_" do
-    log "instance_: TODO"
+    inst <- liftEff do
+      shallow (createElement cls cProps [])
+        >>= E.instance_
+    assert "" (isInstanceOf inst cls)
 
   test "update" do
     wrp <- liftEff do

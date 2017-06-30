@@ -16,7 +16,6 @@ module Test.ReactWrapper
 import Control.Monad.Aff.Console (CONSOLE, log)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Class (liftEff)
-import Control.Monad.Eff.Console (log) as Eff
 import Control.Monad.Except (runExcept)
 import DOM (DOM)
 import DOM.HTML (window)
@@ -40,6 +39,7 @@ import Enzyme.Mount (mount, mountWithOptions)
 import Enzyme.ReactWrapper (ReactWrapper)
 import Enzyme.ReactWrapper as E
 import Enzyme.Types (ENZYME)
+import Enzyme.Utils (isInstanceOf)
 import Partial.Unsafe (unsafePartial)
 import Prelude (bind, discard, id, join, not, pure, show, void, ($), (+), (<$>), (<<<), (<>), (==), (>), (>>=))
 import React (ReactClass, ReactElement, createClass, createElement, getChildren, getProps, readState, spec, transformState)
@@ -145,6 +145,10 @@ testSuite = suite "ReactWrapper" do
 
   test "instance_" do
     log "instance_: TODO"
+    inst <- liftEff do
+      mount (createElement cls cProps [])
+        >>= E.instance_
+    assert "" (isInstanceOf inst cls)
 
   test "update" do
     wrp <- liftEff do
