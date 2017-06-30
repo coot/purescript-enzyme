@@ -32,6 +32,7 @@ module Enzyme.ShallowWrapper
   , props
   , prop
   , state
+  , unsafeState
   , state_
   , stateByKey
   , context
@@ -72,8 +73,9 @@ import Data.Either (Either(..))
 import Data.Foreign (Foreign, F, isNull, readString, toForeign)
 import Data.Foreign.Index (readProp)
 import Enzyme.Types (ENZYME)
-import Prelude (bind, pure)
+import Prelude (bind, pure, (<$>))
 import React (ReactClass, ReactElement, ReactThis)
+import Type.Proxy (Proxy)
 import Unsafe.Coerce (unsafeCoerce)
 
 foreign import data ShallowWrapper :: Type
@@ -160,11 +162,14 @@ foreign import simulateWithArgs :: forall e. String -> Array Foreign -> ShallowW
 
 foreign import props :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
 
+unsafeProps :: forall props e. Proxy props -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) props
+unsafeProps _ wrp = unsafeCoerce <$> props wrp
+
 foreign import prop :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
 
 -- | Note that `purescript-react` writes state as `{ state: state }`
 -- | (so you can use any purescript value as state).  This function will unwrap
--- | the state and return something of the type in your `ReactSpec` signature.
+-- | the state and return what you specified in your `ReactSpec` signature.
 -- |
 -- | Use `runExcept $ join ((readState :: Foreign -> State) <$> state)` to read
 -- | the state from `F Foreign`.
@@ -172,6 +177,9 @@ state :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) (F Foreign)
 state wrp = do
   st <- state_ wrp
   pure (readProp "state" st)
+
+unsafeState :: forall e state. Proxy state -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) state
+unsafeState _ wrp = unsafeCoerce <$> state_ wrp
 
 -- | The original which does not unwrap the state.
 foreign import state_ :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) Foreign
