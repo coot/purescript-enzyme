@@ -2,7 +2,6 @@ module Enzyme.ShallowWrapper
   ( ShallowWrapper
   , getNode
   , getNodes
-  , ref
   , instance_
   , update
   , rerender
@@ -78,8 +77,6 @@ foreign import data ShallowWrapper :: Type
 foreign import getNode :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ReactElement
 
 foreign import getNodes :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) (Array ReactElement)
-
-foreign import ref :: forall e. String -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 foreign import instance_ :: forall e. ShallowWrapper -> Eff (enzyme :: ENZYME | e) ReactClassInstance
 
@@ -205,7 +202,7 @@ foreign import hasClass :: forall e. String -> ShallowWrapper -> Eff (enzyme :: 
 
 -- foreign import forEach :: (ReactElement -> Unit) -> ShallowWrapper
 
-foreign import map :: forall a e. ShallowWrapper -> (ReactElement -> a) -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) (Array a)
+foreign import map :: forall a e. (ReactElement -> a) -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) (Array a)
 
 foreign import reduce :: forall a e. (a -> ShallowWrapper -> Int -> a) -> a -> ShallowWrapper -> Eff (enzyme :: ENZYME | e) a
 

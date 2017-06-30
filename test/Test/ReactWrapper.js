@@ -22,7 +22,6 @@ exports.isThrowing = function(do_) {
       do_()
       return function() {return false}
     } catch (e) {
-      console.log(e.message)
       return function() {return true}
     }
   })

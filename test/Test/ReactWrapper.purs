@@ -1,5 +1,16 @@
 module Test.ReactWrapper
-  (testSuite) where
+  ( testSuite
+  , CProps(..)
+  , CState(..)
+  , readCProps
+  , cls
+  , cState
+  , cProps
+  , isValidElement
+  , isReactWrapper
+  , isThrowing
+  , unsafeGetReactElement
+  ) where
 
 import Control.Monad.Aff.Console (CONSOLE, log)
 import Control.Monad.Eff (Eff)
@@ -341,7 +352,7 @@ testSuite = suite "ReactWrapper" do
 
       assert "should get false" (not match)
 
-    test "should raise" do
+    test "should throw" do
       throws <- liftEff $ do
         wrp <- mount (createElement cls cProps [])
         isThrowing (E.some "x" wrp)

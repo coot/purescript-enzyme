@@ -3,16 +3,16 @@ module Enzyme.Shallow
   , shallowWithOptions
   ) where
 
-import Prelude (($))
-
+import Control.Monad.Eff (Eff)
 import Data.Foreign (Foreign, toForeign)
 import Data.Record.Class (class Subrow)
+import Enzyme.Internals (undefined, unsafeMerge)
 import Enzyme.ShallowWrapper (ShallowWrapper)
+import Enzyme.Types (ENZYME)
+import Prelude (($))
 import React (ReactElement)
 
-import Enzyme.Internals (undefined, unsafeMerge)
-
-foreign import _shallow :: ReactElement -> Foreign -> ShallowWrapper
+foreign import _shallow :: forall e. ReactElement -> Foreign -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 
 type Mandatory r = (|r) :: # Type
 type Optional r = (lifecycleExperimental :: Boolean, context :: Foreign | r)
@@ -21,7 +21,7 @@ type ShallowOptions r = Record (Mandatory (Optional r))
 defaults :: {|Optional ()}
 defaults = { lifecycleExperimental: false, context: toForeign undefined }
 
-shallow :: ReactElement -> ShallowWrapper
+shallow :: forall e. ReactElement -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 shallow e = _shallow e (toForeign defaults)
 
 mergeOpts
@@ -33,12 +33,12 @@ mergeOpts
 mergeOpts o = unsafeMerge o defaults
 
 shallowWithOptions
-  :: forall r s t
+  :: forall r s t e
    .  Union s (Optional ()) (Optional r)
   => Union r t (Optional ())
   => ReactElement
   -> { | s :: # Type }
-  -> ShallowWrapper
+  -> Eff (enzyme :: ENZYME | e) ShallowWrapper
 shallowWithOptions e o = _shallow e $ toForeign opts
   where
     opts = mergeOpts o

@@ -14,14 +14,6 @@ exports.getNodes = function(wrp) {
   }
 }
 
-exports.ref = function(refname) {
-  return function(wrp) {
-    return function() {
-      return wrp.ref(refname)
-    }
-  }
-}
-
 exports.instance_ = function(wrp) {
   return function() {
     return wrp.instance()
@@ -282,9 +274,7 @@ exports.parent = function(wrp) {
 exports.closest = function(selector) {
   return function(wrp) {
     return function() {
-      return function() {
-        return wrp.closest(selector)
-      }
+      return wrp.closest(selector)
     }
   }
 }
@@ -331,8 +321,8 @@ exports.hasClass = function(clsName) {
   }
 }
 
-exports.map = function(wrp) {
-  return function(fn) {
+exports.map = function(fn) {
+  return function(wrp) {
     return function() {
       return wrp.map(fn)
     }
@@ -356,7 +346,7 @@ exports.reduceRight = function(fn) {
     return function(wrp) {
       return function() {
         return wrp.reduceRight(function(v, w, i) {
-          fn(v)(w)(i)
+          return fn(v)(w)(i)
         }, acu)
       }
     }
@@ -429,19 +419,15 @@ exports.at = function(idx) {
   }
 }
 
-exports.first = function(idx) {
-  return function(wrp) {
-    return function() {
-      return wrp.first(idx)
-    }
+exports.first = function(wrp) {
+  return function() {
+    return wrp.first()
   }
 }
 
-exports.last = function(idx) {
-  return function(wrp) {
-    return function() {
-      return wrp.last(idx)
-    }
+exports.last = function(wrp) {
+  return function() {
+    return wrp.last()
   }
 }
 
