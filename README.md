@@ -11,5 +11,12 @@ Purescript bindings for [enzyme](https://github.com/airbnb/enzyme) library.
 bower install purescript-enzyme
 ```
 
+You will also need to install `npm` dependencies:
+```
+npm i --save-dev enzyme
+# and react if you don't have it yet
+npm i --save-dev react
+```
+
 # Documentation
 Module documentation is [published on Pursuit](http://pursuit.purescript.org/purescript-enzyme).
