@@ -13,7 +13,7 @@ bower install purescript-enzyme
 
 You will also need to install `npm` dependencies:
 ```
-npm i --save-dev enzyme
+npm i --save-dev enzyme react-addons-test-utils react-test-renderer
 # and react if you don't have it yet
 npm i --save-dev react
 ```
