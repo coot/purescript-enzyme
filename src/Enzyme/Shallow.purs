@@ -5,7 +5,7 @@ module Enzyme.Shallow
 
 import Control.Monad.Eff (Eff)
 import Data.Foreign (Foreign, toForeign)
-import Data.Record.Class (class Subrow)
+import Enzyme.Class (class Subrow)
 import Enzyme.Internals (undefined, unsafeMerge)
 import Enzyme.ShallowWrapper (ShallowWrapper)
 import Enzyme.Types (ENZYME)
