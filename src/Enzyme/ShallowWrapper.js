@@ -209,7 +209,9 @@ exports.simulateWithArgs = function(ev) {
 
 exports.prop = function(key) {
   return function(wrp) {
-    return wpr.prop(key)
+    return function() {
+      return wrp.prop(key)
+    }
   }
 }
 

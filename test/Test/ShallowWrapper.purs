@@ -24,7 +24,7 @@ import Prelude (Unit, bind, discard, id, join, not, pure, show, unit, ($), (+), 
 import React (ReactClass, createClass, createClassStateless, createElement, getChildren, getProps, readState, spec, transformState)
 import React.DOM as D
 import React.DOM.Props as P
-import Test.ReactWrapper (CProps(CProps), CState(CState), cProps, cState, isThrowing, readCProps, readCState)
+import Test.ReactWrapper (CProps(..), CState(CState), cProps, cState, isThrowing, readCProps, readCState)
 import Test.Unit (TestSuite, failure, suite, test)
 import Test.Unit.Assert (assert)
 import Unsafe.Coerce (unsafeCoerce)
@@ -329,3 +329,13 @@ testSuite = suite "ShallowWrapper" do
       shallow (createElement cls cProps []) >>= E.children >>= E.exists
 
     assert "" exists
+
+  test "prop" do
+    fprp <- liftEff do
+      shallow (createElement cls cProps []) >>= E.childAt 0 >>= E.prop "id"
+
+    case runExcept $ readString fprp of
+      Left err -> do
+        log (unsafeCoerce err)
+        failure "failed to read: " 
+      Right id_ -> assert ("wrong id prop, expected: \"counter\", got: " <> show id_) (id_ == "counter")

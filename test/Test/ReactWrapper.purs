@@ -39,7 +39,7 @@ import Enzyme.ReactWrapper as E
 import Enzyme.Types (ENZYME)
 import Enzyme.Utils (isInstanceOf, isValidElement)
 import Partial.Unsafe (unsafePartial)
-import Prelude (bind, discard, id, join, not, pure, show, void, ($), (+), (<$>), (<<<), (<>), (==), (>), (>>=))
+import Prelude (class Eq, bind, discard, id, join, not, pure, show, void, ($), (+), (<$>), (<<<), (<>), (==), (>), (>>=))
 import React (ReactClass, createClass, createElement, getChildren, getProps, readState, spec, transformState)
 import React.DOM as D
 import React.DOM.Props as P
@@ -50,6 +50,7 @@ import Unsafe.Coerce (unsafeCoerce)
 newtype CProps = CProps { id :: String }
 
 derive instance newtypeCProps :: Newtype CProps _
+derive instance eqCProps :: Eq CProps
 
 cProps :: CProps
 cProps = CProps { id: "main" }
